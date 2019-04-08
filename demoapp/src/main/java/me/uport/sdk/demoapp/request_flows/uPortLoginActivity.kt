@@ -14,7 +14,11 @@ import me.uport.sdk.credentials.Credentials
 import me.uport.sdk.credentials.SelectiveDisclosureRequestParams
 import me.uport.sdk.demoapp.R
 import me.uport.sdk.jwt.JWTTools
-import me.uport.sdk.transport.*
+import me.uport.sdk.transport.ErrorUriResponse
+import me.uport.sdk.transport.JWTUriResponse
+import me.uport.sdk.transport.ResponseParser
+import me.uport.sdk.transport.Transports
+import me.uport.sdk.transport.UriResponse
 
 /**
  * This allows the users initiate a uPort login using [SelectiveDisclosureRequest]
@@ -54,7 +58,7 @@ class uPortLoginActivity : AppCompatActivity() {
 
                 // Send a signed request to uport via Transports
                 @Suppress("LabeledExpression")
-                Transports().sendExpectingResult(this@uPortLoginActivity, requestJWT)
+                Transports().sendExpectingResult(this@uPortLoginActivity, requestJWT, "shareReq")
 
                 withContext(UI) {
                     progress.visibility = View.GONE

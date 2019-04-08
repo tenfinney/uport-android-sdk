@@ -30,8 +30,8 @@ class Transports {
      *
      * > __API volatility: high__
      */
-    fun send(context: Context, jwt: String) {
-        val uri = encodeURICall(jwt)
+    fun send(context: Context, jwt: String, id: String? = null) {
+        val uri = encodeURICall(jwt, id)
 
         val intent = Intent(Intent.ACTION_VIEW, uri)
                 .addCategory(Intent.CATEGORY_BROWSABLE)
@@ -78,8 +78,8 @@ class Transports {
      *
      * > __API volatility: high__
      */
-    fun sendExpectingResult(activity: Activity, jwt: String, requestCode: Int = UPORT_DEFAULT_REQUEST_CODE) {
-        val uri = encodeURICall(jwt)
+    fun sendExpectingResult(activity: Activity, jwt: String, id: String? = null, requestCode: Int = UPORT_DEFAULT_REQUEST_CODE) {
+        val uri = encodeURICall(jwt, id)
 
         val dispatchIntent = Intent(activity, RequestDispatchActivity::class.java)
                 .setAction(RequestDispatchActivity.ACTION_DISPATCH_REQUEST)
@@ -88,9 +88,10 @@ class Transports {
         activity.startActivityForResult(dispatchIntent, requestCode)
     }
 
-    private fun encodeURICall(jwt: String): Uri {
+    private fun encodeURICall(jwt: String, id: String? = null): Uri {
         val encodedQuery = URLEncoder.encode(jwt, "UTF-8")
-        return Uri.parse("https://id.uport.me/req/$encodedQuery?callback_type=redirect")
+        val encodedID = if (id != null) "#id=$id" else ""
+        return Uri.parse("https://id.uport.me/req/$encodedQuery$encodedID?callback_type=redirect")
     }
 
     companion object {
